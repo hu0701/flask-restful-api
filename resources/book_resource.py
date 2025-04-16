@@ -16,8 +16,23 @@ class BookResource(Resource):
         else:
             return {'error': f'Book not found for id: {book_id}'}, 404
 
-    def put(self, student_id: int):
-        return {'id': student_id, 'name': 'Mary', 'gender': 'famale'}
+    def put(self, book_id: int):
+        try:
+            request_json = request.json
+            if request_json:
+                name = request_json.get('name')
+                author = request_json.get('author')
+                publish_time_str = request_json.get('publish_time', None)
+                publish_time = datetime.fromisoformat(publish_time_str) if publish_time_str else None
+
+                book_model = BookModel(id=book_id, name=name, author=author, publish_time=publish_time)
+                book_model = BookService().update_book(book_model)
+
+                return book_model.serialize()
+            else:
+                return {'error': 'Please provide Book info as a Json'}, 400
+        except Exception as error:
+            return {'error': 'f'(error)}, 400
 
 
 class BookListResource(Resource):
@@ -26,18 +41,21 @@ class BookListResource(Resource):
         return [book_model.serialize() for book_model in book_list]
 
     def post(self):
-        request_json = request.json
-        if request_json:
-            name = request_json.get('name')
-            author = request_json.get('author')
-            publish_time = datetime.fromisoformat(request_json.get('publish_time', None))
+        try:
+            request_json = request.json
+            if request_json:
+                name = request_json.get('name')
+                author = request_json.get('author')
+                publish_time = datetime.fromisoformat(request_json.get('publish_time', None))
 
-            book_model = BookModel(name=name, author=author, publish_time=publish_time)
-            BookService().create_book(book_model)
+                book_model = BookModel(name=name, author=author, publish_time=publish_time)
+                BookService().create_book(book_model)
 
-            return book_model.serialize()
-        else:
-            return {'error': 'Please provide Book info as a Json'}, 400
+                return book_model.serialize()
+            else:
+                return {'error': 'Please provide Book info as a Json'}, 400
+        except Exception as error:
+            return {'error': str(error)}, 500
 
 
 api.add_resource(BookResource, '/books/<int:book_id>')
