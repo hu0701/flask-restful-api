@@ -1,13 +1,14 @@
 from datetime import datetime
 
-import jwt
+
 from flask import request
 from flask_restful import Resource
 
-from common.constants import LOGIN_SECRET
+from common.api_tools import token_required
 from models.book_model import BookModel
 from resources import api
 from services.book_service import BookService
+
 
 
 class BookResource(Resource):
@@ -18,17 +19,8 @@ class BookResource(Resource):
         else:
             return {'error': f'Book not found for id: {book_id}'}, 404
 
-    def put(self, book_id: int):
-        jwt_token = request.headers.get(key='token',default=None)
-        if not jwt_token:
-            return {'error': 'Please provide token'}, 401
-        try:
-            user_info = jwt.decode(jwt_token, LOGIN_SECRET, algorithms=['HS256'])
-            if not user_info or not user_info.get('username',None):
-                return {'error': 'Please provide valid token'}, 401
-        except Exception as error:
-            return {'error': 'User unauthorized'}, 401
-
+    @token_required()
+    def put(self, book_id: int):  # 功能：更新书籍信息
         try:
             request_json = request.json
             if request_json:
@@ -52,6 +44,7 @@ class BookListResource(Resource):
         book_list = BookService().get_all_books()
         return [book_model.serialize() for book_model in book_list]
 
+    @token_required()  # 来检查用户是否已认证
     def post(self):
         try:
             request_json = request.json
