@@ -1,8 +1,10 @@
 from datetime import datetime
 
+import jwt
 from flask import request
 from flask_restful import Resource
 
+from common.constants import LOGIN_SECRET
 from models.book_model import BookModel
 from resources import api
 from services.book_service import BookService
@@ -17,6 +19,16 @@ class BookResource(Resource):
             return {'error': f'Book not found for id: {book_id}'}, 404
 
     def put(self, book_id: int):
+        jwt_token = request.headers.get(key='token',default=None)
+        if not jwt_token:
+            return {'error': 'Please provide token'}, 401
+        try:
+            user_info = jwt.decode(jwt_token, LOGIN_SECRET, algorithms=['HS256'])
+            if not user_info or not user_info.get('username',None):
+                return {'error': 'Please provide valid token'}, 401
+        except Exception as error:
+            return {'error': 'User unauthorized'}, 401
+
         try:
             request_json = request.json
             if request_json:
