@@ -10,3 +10,4 @@ db = SQLAlchemy(app)    # 实例化SQLAlchemy对象
 from resources import student_resources  # 导入student_resources模块中的所有内容
 from resources import book_resource      # 导入book_resource模块中的所有内容
 from resources import user_resources     # 导入user_resources模块中的所有内容
+from resources import attachment_resouces    # 导入resources模块中的所有内容

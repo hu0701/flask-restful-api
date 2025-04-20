@@ -6,7 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from resources import db
 
 
-class BookModel(db.Model):
+class BookModel(db.Model):  # 书籍模型，定义数据库，书籍的属性，方法中的属性
 
     #
     # id = db.Column(db.Integer, primary_key=True)
@@ -22,7 +22,7 @@ class BookModel(db.Model):
     #     self.description = description
     #     self.price = price
     #     self.quantity
-    __tablename__ = 'books'
+    __tablename__ = 'books'  # 表名
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     author: Mapped[str] = mapped_column(String(255), nullable=False)

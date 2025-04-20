@@ -11,8 +11,8 @@ from services.book_service import BookService
 
 
 
-class BookResource(Resource):
-    def get(self, book_id: int):
+class BookResource(Resource): # 功能：获取单个书籍信息、更新书籍信息
+    def get(self, book_id: int): # 功能：获取单个书籍信息
         book_model = BookService().get_book_by_id(book_id)
         if book_model:
             return book_model.serialize()
@@ -39,7 +39,7 @@ class BookResource(Resource):
             return {'error': 'f'(error)}, 400
 
 
-class BookListResource(Resource):
+class BookListResource(Resource): # 功能：获取所有书籍信息、创建书籍信息
     def get(self):
         book_list = BookService().get_all_books()
         return [book_model.serialize() for book_model in book_list]
@@ -63,5 +63,5 @@ class BookListResource(Resource):
             return {'error': str(error)}, 500
 
 
-api.add_resource(BookResource, '/books/<int:book_id>')
-api.add_resource(BookListResource, '/books')
+api.add_resource(BookResource, '/books/<int:book_id>')  # 功能：添加资源路由，其中book_id是动态参数
+api.add_resource(BookListResource, '/books')    # 功能：添加资源路由

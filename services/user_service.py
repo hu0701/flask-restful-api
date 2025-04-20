@@ -4,8 +4,8 @@ from models.user_model import UserModel
 from resources import db
 
 
-class UserService:
-    def login(self, username: str, password: str):
+class UserService:  # 服务功能：登录类
+    def login(self, username: str, password: str):  # 在登录方法中，传入用户名和密码
         print(password)
         query = Select(UserModel).where(UserModel.username == username)  # 构建查询语句
         user_model = db.session.scalars(query).first()      # 查询用户

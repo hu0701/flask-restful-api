@@ -4,7 +4,7 @@ from models.book_model import BookModel
 from resources import db
 
 
-class BookService:
+class BookService:  # 书籍服务类，定义了增删改查书籍的方法
     def get_book_by_id(self, book_id: int):
         return db.session.get(BookModel, book_id)
 
