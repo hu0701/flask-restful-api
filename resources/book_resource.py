@@ -10,8 +10,8 @@ from resources import app, api, docs
 from services.book_service import BookService
 
 
-class BookResource(MethodResource, Resource):  # 功能：获取单个书籍信息、更新书籍信息
-    @doc(description='Get a book info by id', tage=['Book Resource'])
+class BookResource(MethodResource, Resource):  # 功能：获取单个书籍信息、更新书籍信息, MethodResource与@doc结合使用
+    @doc(description='Get a book info by id', tags=['Book Resource'])       # @doc用于描述API接口
     def get(self, book_id: int):  # 功能：获取单个书籍信息
         book_model = BookService().get_book_by_id(book_id)
         if book_model:
@@ -19,7 +19,7 @@ class BookResource(MethodResource, Resource):  # 功能：获取单个书籍信�
         else:
             return {'error': f'Book not found for id: {book_id}'}, 404
 
-    @doc(description='Get a book info by id', tage=['Book Resource'])
+    @doc(description='Update a book info by id', tags=['Book Resource'])
     @token_required()
     def put(self, book_id: int):  # 功能：更新书籍信息
         try:
@@ -40,11 +40,13 @@ class BookResource(MethodResource, Resource):  # 功能：获取单个书籍信�
             return {'error': 'f'(error)}, 400
 
 
-class BookListResource(Resource):  # 功能：获取所有书籍信息、创建书籍信息
+class BookListResource(MethodResource, Resource):  # 功能：获取所有书籍信息、创建书籍信息
+    @doc(description='Get a book info by id')
     def get(self):
         book_list = BookService().get_all_books()
         return [book_model.serialize() for book_model in book_list]
 
+    @doc(description='创建数据', tage=['Books'])
     @token_required()  # 来检查用户是否已认证
     def post(self):
         try:
@@ -68,6 +70,7 @@ api.add_resource(BookResource, '/books/<int:book_id>')  # 功能：添加资源�
 api.add_resource(BookListResource, '/books')  # 功能：添加资源路由
 
 docs.register(BookResource)  # 注册BookResource类到docs对象中
+docs.register(BookListResource)  # 注册BookListResource类到docs对象中
 
 
 @app.route('/swagger.yaml', methods=['GET'])

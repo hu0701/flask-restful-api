@@ -25,6 +25,7 @@
 ## 7、生成swagger文档
 - **使用flask-restx生成swagger文档**
 ![img_2.png](images/img_2.png)
+![img.png](images/img_2.1.png)
 
 
 
