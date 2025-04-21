@@ -7,21 +7,6 @@ from resources import db
 
 
 class BookModel(db.Model):  # 书籍模型，定义数据库，书籍的属性，方法中的属性
-
-    #
-    # id = db.Column(db.Integer, primary_key=True)
-    # title = db.Column(db.String(100), nullable=False)
-    # author = db.Column(db.String(100), nullable=False)
-    # description = db.Column(db.String(500), nullable=False)
-    # price = db.Column(db.Float, nullable=False)
-    # quantity = db.Column(db.Integer, nullable=False)
-    #
-    # def __init__(self, title, author, description, price, quantity):
-    #     self.title = title
-    #     self.author = author
-    #     self.description = description
-    #     self.price = price
-    #     self.quantity
     __tablename__ = 'books'  # 表名
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
